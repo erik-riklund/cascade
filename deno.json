@@ -5,12 +5,11 @@
     "nextControlFlowPosition": "maintain"
   },
   "imports": {
-    "~/": "./",
     "@std/expect": "jsr:@std/expect@^1.0.20",
     "@std/testing": "jsr:@std/testing@^1.0.20"
   },
   "tasks": {
-    "dist": "deno bundle index.js --minify --output css-producer.js",
-    "test": "deno test --watch --no-check"
+    "dist": "deno bundle index.js --minify --output cascade.js",
+    "test": "deno test --watch --no-check --fail-fast"
   }
 }
