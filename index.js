@@ -111,9 +111,8 @@ export const resolve = (
         ([key]) => {
           plugins.property.forEach((plugin) => {
             const current_value = properties[key];
-            if (plugin.test(key, current_value)) {
-              const [, new_value] = plugin.transform(key, current_value);
-              properties[key] = new_value;
+            if (plugin.test(current_value)) {
+              properties[key] = plugin.transform(current_value);
             }
           });
         }

@@ -62,6 +62,14 @@ test_group(
           ];
           expect(resolve([node])).toEqual(expected_result);
         }
+      ],
+      [
+        "should return an empty instruction list for empty nested trees",
+        () => {
+          const node = ["table", ["tr", ["td"]]];
+          const expected_result = [];
+          expect(resolve([node])).toEqual(expected_result);
+        }
       ]
     ]
   })

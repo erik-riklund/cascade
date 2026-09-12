@@ -1,11 +1,9 @@
-export default [
-  // {
-  //   type: "property",
-  //   test: (_key, value) => {
-  //     return value.includes("$");
-  //   },
-  //   transform: (key, value) => {
-  //     return [key, value];
-  //   }
-  // }
-];
+export default {
+  type: "property",
+  test: (value) => {
+    return value.includes("$");
+  },
+  transform: (value) => {
+    return value.replace(/\$(\w+(-\w+)*)/g, "var(--$1)");
+  }
+};
