@@ -1,14 +1,19 @@
-const compiled_patterns = {};
+import type { Plugin } from "~/index.ts";
+const compiled_patterns: Record<string, RegExp> = {};
 
-const parse = (selector, { pattern, labels }) => {
+const parse = <L extends readonly string[]>(
+  selector: string,
+  { pattern, labels }: { pattern: string; labels: L }
+): null | { [K in L[number]]: string } => {
   const expression = compile_pattern(pattern);
   const matches = expression.exec(selector);
+  // @ts-ignore: Record type mismatch.
   return !matches ? null : Object.fromEntries(
     labels.map((label, index) => [label, matches[index + 1]])
   );
 };
 
-const compile_pattern = (pattern) => {
+const compile_pattern = (pattern: string) => {
   if (pattern in compiled_patterns) {
     return compiled_patterns[pattern];
   }
@@ -37,20 +42,22 @@ export default [
       return /^screen\s+(width|height)\s/.test(selector);
     },
     transform: (selector) => {
-      const { axis, lower, upper } = parse(selector, {
+      const params = parse(selector, {
         pattern: "screen {width,height} (*)..(*)",
-        labels: ["axis", "lower", "upper"]
+        labels: ["axis", "lower", "upper"] as const
       });
 
-      if (axis && (lower || upper)) {
-        const chunks = [
-          lower ? `(min-${axis}:${lower})` : null,
-          upper ? `(max-${axis}:${upper})` : null
-        ];
-        return "@media " + chunks.filter(Boolean).join("and");
+      if (params !== null) {
+        const { axis, lower, upper } = params;
+        if (axis && (lower || upper)) {
+          const chunks = [
+            lower ? `(min-${axis}:${lower})` : null,
+            upper ? `(max-${axis}:${upper})` : null
+          ];
+          return "@media " + chunks.filter(Boolean).join("and");
+        }
       }
-
       return selector;
     }
   }
-];
+] satisfies Plugin[];

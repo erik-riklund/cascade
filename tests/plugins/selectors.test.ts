@@ -1,6 +1,6 @@
-import { resolve } from "../../index.js";
-import test_group from "../../testing.js";
-import selectors from "../../plugins/selectors.js";
+import test_group from "~/testing.ts";
+import { type Node, resolve } from "~/index.ts";
+import selectors from "~/plugins/selectors.ts";
 
 test_group(
   ({ expect }) => ({
@@ -12,7 +12,8 @@ test_group(
           const node = [
             "div",
             ["screen width ..380px", { color: "red" }]
-          ];
+          ] satisfies Node;
+
           const instructions = resolve([node], selectors);
           expect(instructions).toEqual([
             ["selector", "div", 1],
@@ -28,7 +29,8 @@ test_group(
           const node = [
             "div",
             ["screen width 380px..", { color: "red" }]
-          ];
+          ] satisfies Node;
+
           const instructions = resolve([node], selectors);
           expect(instructions).toEqual([
             ["selector", "div", 1],
@@ -44,7 +46,8 @@ test_group(
           const node = [
             "div",
             ["screen width 380px..1024px", { color: "red" }]
-          ];
+          ] satisfies Node;
+
           const instructions = resolve([node], selectors);
           expect(instructions).toEqual([
             ["selector", "div", 1],

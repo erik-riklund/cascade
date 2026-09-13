@@ -1,5 +1,5 @@
-import { generate } from "../index.js";
-import test_group from "../testing.js";
+import test_group from "~/testing.ts";
+import { generate, type Instruction } from "~/index.ts";
 
 test_group(
   ({ expect }) => ({
@@ -10,7 +10,8 @@ test_group(
           const instructions = [
             ["selector", "div", 1],
             ["property", "color", "red"]
-          ];
+          ] satisfies Instruction[];
+
           const expected_result = "div{color:red}";
           expect(generate(instructions)).toEqual(expected_result);
         }
@@ -23,7 +24,8 @@ test_group(
             ["selector", "div", 1],
             ["selector", "span", 1],
             ["property", "color", "red"]
-          ];
+          ] satisfies Instruction[];
+
           const expected_result = "div,span{color:red}";
           expect(generate(instructions)).toEqual(expected_result);
         }
@@ -35,7 +37,8 @@ test_group(
             ["selector", "div", 1],
             ["property", "color", "red"],
             ["property", "font-size", "100%"]
-          ];
+          ] satisfies Instruction[];
+
           const expected_result = "div{color:red;font-size:100%}";
           expect(generate(instructions)).toEqual(expected_result);
         }
@@ -49,7 +52,8 @@ test_group(
             ["property", "font-size", "100%"],
             ["selector", "span", 1],
             ["property", "color", "yellow"]
-          ];
+          ] satisfies Instruction[];
+
           const expected_chunks = [
             "div{color:red;font-size:100%}",
             "span{color:yellow}"
@@ -68,7 +72,8 @@ test_group(
             ["property", "font-size", "100%"],
             ["selector", "span", 2],
             ["property", "color", "yellow"]
-          ];
+          ] satisfies Instruction[];
+
           const expected_chunks = [
             "h1{color:green}",
             "div{color:red;font-size:100%;",
@@ -90,7 +95,8 @@ test_group(
             ["property", "color", "yellow"],
             ["selector", "button", 1],
             ["property", "color", "pink"]
-          ];
+          ] satisfies Instruction[];
+
           const expected_chunks = [
             "h1{color:green}",
             "div{color:red;span{color:yellow}}",

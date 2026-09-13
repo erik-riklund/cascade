@@ -1,5 +1,5 @@
-import { resolve } from "../index.js";
-import test_group from "../testing.js";
+import test_group from "~/testing.ts";
+import { type Node, resolve } from "~/index.ts";
 
 test_group(
   ({ expect }) => ({
@@ -7,7 +7,11 @@ test_group(
       [
         "should emit `selector` and `property` instructions for a simple rule node",
         () => {
-          const node = ["div", { color: "red" }];
+          const node = [
+            "div",
+            { color: "red" }
+          ] satisfies Node;
+
           const expected_result = [
             ["selector", "div", 1],
             ["property", "color", "red"]
@@ -21,7 +25,8 @@ test_group(
           const node = [
             ["div", "span"],
             { color: "red" }
-          ];
+          ] satisfies Node;
+
           const expected_result = [
             ["selector", "div", 1],
             ["selector", "span", 1],
@@ -37,7 +42,8 @@ test_group(
             "div",
             { color: "red" },
             ["span", { color: "yellow" }]
-          ];
+          ] satisfies Node;
+
           const expected_result = [
             ["selector", "div", 1],
             ["property", "color", "red"],
@@ -54,7 +60,8 @@ test_group(
             "div",
             ["span"],
             [".warning", { color: "orange" }]
-          ];
+          ] satisfies Node;
+
           const expected_result = [
             ["selector", "div", 1],
             ["selector", ".warning", 2],
@@ -66,9 +73,8 @@ test_group(
       [
         "should return an empty instruction list for empty nested trees",
         () => {
-          const node = ["table", ["tr", ["td"]]];
-          const expected_result = [];
-          expect(resolve([node])).toEqual(expected_result);
+          const node = ["table", ["tr", ["td"]]] satisfies Node;
+          expect(resolve([node])).toEqual([]);
         }
       ]
     ]
