@@ -92,7 +92,7 @@ export const resolve = (
     const properties = node[1] && !Array.isArray(node[1])
       ? { ...node[1] }
       : null;
-    const children = node.slice(properties ? 2 : 1).flatMap(
+    const children = node.slice(properties ? 2 : 1)?.flatMap(
       (child) => [...resolve([child], plugins, current_depth + 1)]
     );
 
@@ -119,7 +119,7 @@ export const resolve = (
       );
     }
 
-    if (properties || children.length) {
+    if (properties || children?.length) {
       selectors.forEach((selector) => {
         instructions.push(["selector", selector, current_depth]);
       });
@@ -128,7 +128,7 @@ export const resolve = (
           instructions.push(["property", key, value]);
         });
       }
-      if (children.length) {
+      if (children?.length) {
         instructions.push(...children);
       }
     }
