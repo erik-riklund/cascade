@@ -1,21 +1,33 @@
 import test_group from "../../testing.js";
 import variables from "../../plugins/variables.js";
+import { resolve } from "../../index.js";
 
 test_group(
   ({ expect }) => ({
     tests: [
       [
-        "should identify values prefixed with `$`",
+        "should ...",
         () => {
-          expect(variables.test("$foo")).toBe(true);
-          expect(variables.test("foo")).toBe(false);
+          const node = ["div", { color: "$text-color" }];
+          const instructions = resolve([node], [variables]);
+          expect(instructions).toEqual([
+            ["selector", "div", 1],
+            ["property", "color", "var(--text-color)"]
+          ]);
         }
       ],
       [
-        "should transform prefixed identifiers into `var()` declarations",
+        "should ...",
         () => {
-          expect(variables.transform("foo")).toBe("foo");
-          expect(variables.transform("$foo")).toBe("var(--foo)");
+          const node = [
+            "div",
+            { border: "2px solid $border-color" }
+          ];
+          const instructions = resolve([node], [variables]);
+          expect(instructions).toEqual([
+            ["selector", "div", 1],
+            ["property", "border", "2px solid var(--border-color)"]
+          ]);
         }
       ]
     ]
